@@ -17,6 +17,9 @@ from options_menu import OptionsMenu
 # Import the new database menu screen
 from database_menu import DatabaseMenu
 
+# Import the new enemy viewer screen
+from enemy_viewer import EnemyViewer # Import EnemyViewer
+
 # This is the main class for our application.
 class Application:
     """
@@ -59,6 +62,10 @@ class Application:
         # Create and add the new DatabaseMenu frame to our dictionary of frames
         self.frames["DatabaseMenu"] = DatabaseMenu(container, self.show_frame)
 
+        # Create and add the new EnemyViewer frame to our dictionary of frames
+        # Initially, it's created without specific enemy data
+        self.frames["EnemyViewer"] = EnemyViewer(container, self.show_frame)
+
         # Position all frames on top of each other using grid
         for frame_name, frame in self.frames.items():
             frame.grid(row=0, column=0, sticky="nsew")
@@ -66,14 +73,21 @@ class Application:
         # Show the main menu when the application starts
         self.show_frame("MainMenu")
 
-    def show_frame(self, page_name):
+    def show_frame(self, page_name, **kwargs):
         """
         Raises the specified frame to the top, making it visible.
 
         Args:
-            page_name: The name of the frame to show (e.g., "MainMenu", "OptionsMenu").
+            page_name: The name of the frame to show (e.g., "MainMenu", "OptionsMenu", "EnemyViewer").
+            **kwargs: Additional keyword arguments to pass to the frame's display method,
+                      e.g., 'enemy_data' for the EnemyViewer.
         """
         frame = self.frames[page_name]
+        
+        # If the frame is EnemyViewer and enemy_data is provided, update its content
+        if page_name == "EnemyViewer" and "enemy_data" in kwargs:
+            frame.display_enemy_data(kwargs["enemy_data"])
+            
         frame.tkraise()
     
     def _apply_initial_settings(self):

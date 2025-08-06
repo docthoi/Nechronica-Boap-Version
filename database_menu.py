@@ -1,6 +1,7 @@
 # database_menu.py
 
 import tkinter as tk
+from enemy_viewer import EnemyViewer, MOCK_ZOMBIE_DATA # Import the new EnemyViewer and mock data
 
 class DatabaseMenu(tk.Frame):
     """
@@ -253,7 +254,7 @@ class DatabaseMenu(tk.Frame):
         # Create a listbox to hold the enemy data, with a limited height
         self.enemy_listbox = tk.Listbox(list_frame, height=4, font=("Helvetica", 12),
                                        fg="#f0f0f0", bg="#2c2c2c",
-                                       selectbackground="#3498db", selectforeground="#ecf0f1",
+                                       selectbackground="#3498db", selectforeground="#ecf0f0",
                                        yscrollcommand=scrollbar.set, relief="flat", bd=0,
                                        highlightthickness=0)
         
@@ -279,6 +280,17 @@ class DatabaseMenu(tk.Frame):
         if selected_index:
             selected_item = self.enemy_listbox.get(selected_index[0])
             print(f"Enemy selected: {selected_item}")
+
+            # Check if the selected item is "۶ Zombie" and display its data
+            if selected_item == "۶ Zombie":
+                # Assuming the main application's show_frame can handle passing data
+                # We need to ensure the Application class (in gui.py) can receive this data
+                # and pass it to the EnemyViewer instance.
+                # For now, we'll directly switch and rely on the main Application to update the viewer.
+                self.switch_frame_callback("EnemyViewer", enemy_data=MOCK_ZOMBIE_DATA)
+            else:
+                print(f"Viewer for {selected_item} not yet implemented.")
+
 
     def _on_menu_item_click(self, item, label):
         """
@@ -383,3 +395,4 @@ class DatabaseMenu(tk.Frame):
         self.necromancer_buttons_frame.pack_forget()
         # The main menu also needs padding
         self.main_buttons_frame.pack(padx=20, anchor="nw")
+
