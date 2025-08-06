@@ -1,0 +1,120 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Monster Definition",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the monster (e.g., 'mon_zombie_basic')",
+      "example": "mon_zombie_basic"
+    },
+    "name": {
+      "type": "string",
+      "description": "The human-readable name of the monster to be displayed in-game",
+      "example": "Zombie"
+    },
+    "portrait": {
+      "type": "string",
+      "description": "File path to the monster's portrait image, relative to the game's assets folder.",
+      "example": "monsters/zombie_basic.png"
+    },
+    "threatLevel": {
+      "type": "object",
+      "description": "Threat level rating, broken down into machine-readable values",
+      "properties": {
+        "base": {
+          "type": "integer",
+          "description": "The base threat value of the monster",
+          "example": 1
+        },
+        "per_spawn_group": {
+          "type": "integer",
+          "description": "How many monsters of this type to spawn together in a group",
+          "example": 5
+        }
+      },
+      "required": ["base", "per_spawn_group"]
+    },
+    "maximumActionPoints": {
+      "type": "integer",
+      "description": "Maximum number of action points the unit can use",
+      "example": 8
+    },
+    "maneuvers": {
+      "type": "array",
+      "description": "List of maneuvers the monster can perform",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the maneuver (e.g., 'unarmed_attack')",
+            "example": "rend_attack"
+          },
+          "timing": {
+            "type": "string",
+            "enum": ["Action", "Rapid", "Auto", "Check", "Damage"],
+            "description": "The timing of the maneuver"
+          },
+          "cost": {
+            "type": "integer",
+            "description": "Action point cost to perform the maneuver",
+            "example": 2
+          },
+          "range": {
+            "type": "integer",
+            "description": "Range of the maneuver in tiles",
+            "example": 0
+          },
+          "description": {
+            "type": "string",
+            "description": "Human-readable description of the maneuver",
+            "example": "Unarmed Attack 1 + Chain Attack (Number of Zombies in the same Area divided by 10) (Round down)"
+          },
+          "damage": {
+            "type": "object",
+            "description": "Detailed damage information for the attack",
+            "properties": {
+              "base_damage": {
+                "type": "integer",
+                "description": "Base damage of the attack",
+                "example": 1
+              },
+              "effect": {
+                "type": "string",
+                "description": "Damage type or special effect (e.g., 'bash', 'cut', 'poison')",
+                "example": "bash"
+              },
+              "formula": {
+                "type": "string",
+                "description": "A formula to calculate additional damage based on game state (e.g., 'chain_attack')"
+              }
+            },
+            "required": ["base_damage", "effect"]
+          }
+        },
+        "required": ["id", "timing", "cost", "range"]
+      }
+    },
+    "flavor": {
+      "type": "object",
+      "description": "Descriptive, human-readable text for codex entries and lore",
+      "properties": {
+        "description": {
+          "type": "string",
+            "example": "Possessing no Reinforcements at all, these are the most basic of the Undead..."
+        },
+        "tactics": {
+          "type": "string",
+          "example": "The advantage of using zombies is their low cost..."
+        },
+        "roleplay": {
+          "type": "string",
+          "example": "Zombies that appear as a group lack individual personality..."
+        }
+      },
+      "required": ["description", "tactics", "roleplay"]
+    }
+  },
+  "required": ["id", "name", "threatLevel", "maximumActionPoints", "maneuvers", "flavor"]
+}
