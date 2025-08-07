@@ -17,9 +17,6 @@ from options_menu import OptionsMenu
 # Import the new database menu screen
 from database_menu import DatabaseMenu
 
-# Import the new enemy viewer screen
-from enemy_viewer import EnemyViewer # Import EnemyViewer
-
 # This is the main class for our application.
 class Application:
     """
@@ -60,11 +57,8 @@ class Application:
         self.frames["OptionsMenu"] = OptionsMenu(container, self.show_frame, self.settings)
 
         # Create and add the new DatabaseMenu frame to our dictionary of frames
+        # DatabaseMenu will now manage EnemyViewer internally
         self.frames["DatabaseMenu"] = DatabaseMenu(container, self.show_frame)
-
-        # Create and add the new EnemyViewer frame to our dictionary of frames
-        # Initially, it's created without specific enemy data
-        self.frames["EnemyViewer"] = EnemyViewer(container, self.show_frame)
 
         # Position all frames on top of each other using grid
         for frame_name, frame in self.frames.items():
@@ -78,16 +72,12 @@ class Application:
         Raises the specified frame to the top, making it visible.
 
         Args:
-            page_name: The name of the frame to show (e.g., "MainMenu", "OptionsMenu", "EnemyViewer").
-            **kwargs: Additional keyword arguments to pass to the frame's display method,
-                      e.g., 'enemy_data' for the EnemyViewer.
+            page_name: The name of the frame to show (e.g., "MainMenu", "OptionsMenu", "DatabaseMenu").
+            **kwargs: Additional keyword arguments (no longer directly used for EnemyViewer here).
         """
         frame = self.frames[page_name]
-        
-        # If the frame is EnemyViewer and enemy_data is provided, update its content
-        if page_name == "EnemyViewer" and "enemy_data" in kwargs:
-            frame.display_enemy_data(kwargs["enemy_data"])
-            
+        # The EnemyViewer is now managed internally by DatabaseMenu,
+        # so no special handling is needed here for it.
         frame.tkraise()
     
     def _apply_initial_settings(self):
